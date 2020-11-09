@@ -20,7 +20,9 @@ func (v *ego) init(maxRadius float64, speed float64) {
 }
 
 func (v *ego) travel() {
+	// Move the angle forward
 	v.Angle += v.Speed
+	// Adjust the X, Y coordinates
 	sin, cos := math.Sincos(gg.Radians(v.Angle))
 	v.X = v.Radius * cos
 	v.Y = v.Radius * sin
@@ -42,7 +44,8 @@ func main() {
 		egos[i].init(maxRadius, 0.5+rand.Float64()*6.0)
 	}
 
-	// Draw all the egos
+	// Rotate all the egos until we complete a circle,
+	// and then, for each rotation...
 	for i := 0; i < 360; i++ {
 		// Start a drawing context
 		dc := gg.NewContext(int(s), int(s))
@@ -51,6 +54,7 @@ func main() {
 		dc.SetColor(color.RGBA{0, 0, 0, 255})
 		dc.Clear()
 
+		// Draw all the egos
 		for n := range egos {
 			ego := &egos[n]
 			ego.travel()
@@ -66,6 +70,8 @@ func main() {
 			dc.DrawCircle(ego.X+s/2, ego.Y+s/2, 12)
 			dc.Fill()
 		}
+
+		// Save the output
 		dc.SavePNG(fmt.Sprintf("i-%d.png", i))
 	}
 }
